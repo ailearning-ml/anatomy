@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DependencyGraph",
+  "type": "object",
+  "required": ["documents", "dependencies"],
+  "properties": {
+    "documents": {
+      "type": "array",
+      "items": {
+        "$ref": "./document.schema.json"
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "$ref": "./dependency.schema.json"
+      }
+    },
+    "clusters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "domain": { "type": "string" },
+          "members": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["name", "members"]
+      }
+    },
+    "critical_paths": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "cycles": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    }
+  }
+}
