@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AnalysisOutput",
+  "type": "object",
+  "required": ["documents", "dependencies", "graph_summary", "slides"],
+  "properties": {
+    "documents": {
+      "type": "array",
+      "items": { "$ref": "./document.schema.json" }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "$ref": "./dependency.schema.json" }
+    },
+    "graph_summary": {
+      "type": "object",
+      "properties": {
+        "total_documents": { "type": "integer" },
+        "total_dependencies": { "type": "integer" },
+        "critical_dependencies": { "type": "integer" },
+        "circular_dependencies": { "type": "integer" },
+        "interdomain_dependencies": { "type": "integer" }
+      },
+      "required": [
+        "total_documents",
+        "total_dependencies",
+        "critical_dependencies",
+        "circular_dependencies",
+        "interdomain_dependencies"
+      ]
+    },
+    "slides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "purpose": { "type": "string" },
+          "content": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["title", "purpose", "content"]
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
