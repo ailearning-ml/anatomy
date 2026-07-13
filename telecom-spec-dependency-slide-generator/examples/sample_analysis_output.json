@@ -1,0 +1,97 @@
+{
+  "documents": [
+    {
+      "id": "ts-001",
+      "title": "5G Core Service Exposure Specification",
+      "domain": "core-network",
+      "version": "1.0",
+      "organization": "3GPP",
+      "summary": "Defines service exposure functions and related interfaces for 5G core capabilities."
+    },
+    {
+      "id": "ts-002",
+      "title": "Network Slice Management Profile",
+      "domain": "orchestration",
+      "version": "2.1",
+      "organization": "TM Forum",
+      "summary": "Describes orchestration and lifecycle control for network slices."
+    },
+    {
+      "id": "ts-003",
+      "title": "Subscriber Data Interface Guidelines",
+      "domain": "data-management",
+      "version": "1.4",
+      "organization": "ETSI",
+      "summary": "Specifies data exchange expectations for subscriber profile access."
+    }
+  ],
+  "dependencies": [
+    {
+      "source": "ts-001",
+      "target": "ts-003",
+      "type": "data",
+      "criticality": "high",
+      "confidence": 0.94,
+      "basis": "explicit",
+      "rationale": "Service exposure functions require subscriber data access for request fulfillment."
+    },
+    {
+      "source": "ts-002",
+      "target": "ts-001",
+      "type": "integration",
+      "criticality": "high",
+      "confidence": 0.9,
+      "basis": "inferred",
+      "rationale": "Slice lifecycle orchestration depends on exposed core capabilities for control-plane coordination."
+    },
+    {
+      "source": "ts-002",
+      "target": "ts-003",
+      "type": "process",
+      "criticality": "medium",
+      "confidence": 0.81,
+      "basis": "inferred",
+      "rationale": "Provisioning workflows appear to require synchronized subscriber data updates."
+    }
+  ],
+  "graph_summary": {
+    "total_documents": 3,
+    "total_dependencies": 3,
+    "critical_dependencies": 2,
+    "circular_dependencies": 0,
+    "interdomain_dependencies": 3
+  },
+  "slides": [
+    {
+      "title": "Executive Summary",
+      "purpose": "Provide a high-level overview of the dependency landscape.",
+      "content": [
+        "Three telecom specifications were analyzed across core-network, orchestration, and data-management domains.",
+        "Two high-criticality dependencies were identified.",
+        "All detected dependencies cross domain boundaries, indicating strong coordination requirements."
+      ]
+    },
+    {
+      "title": "High-Criticality Dependencies",
+      "purpose": "Highlight relationships most likely to affect delivery or interoperability.",
+      "content": [
+        "5G Core Service Exposure Specification depends explicitly on Subscriber Data Interface Guidelines.",
+        "Network Slice Management Profile appears to rely on 5G Core Service Exposure capabilities for lifecycle coordination."
+      ]
+    },
+    {
+      "title": "Recommendations",
+      "purpose": "Summarize next actions for analysts and architects.",
+      "content": [
+        "Validate inferred orchestration-to-core dependency with domain SMEs.",
+        "Prioritize integration testing around subscriber data access assumptions.",
+        "Track cross-domain dependency changes during standards version updates."
+      ]
+    }
+  ],
+  "recommendations": [
+    "Review explicit evidence for all high-criticality dependencies.",
+    "Confirm inferred dependencies through architecture workshops.",
+    "Establish version compatibility tracking between related specifications."
+  ]
+}
