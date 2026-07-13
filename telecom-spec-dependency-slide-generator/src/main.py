@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from dataclasses import asdict
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable, List, Mapping, Any
 
 from .dependency_analyzer import DependencyAnalyzer
 from .models import AnalysisOutput, Document, Slide
@@ -28,7 +28,7 @@ def build_analysis(documents: Iterable[Document]) -> AnalysisOutput:
     )
 
 
-def parse_input_documents(payload: List[dict]) -> List[Document]:
+def parse_input_documents(payload: List[Mapping[str, Any]]) -> List[Document]:
     """Parse a list of raw document payloads into normalized Document objects."""
     parser = DocumentParser()
     return parser.parse_many(payload)
@@ -48,7 +48,8 @@ def _collect_recommendations(slides: Iterable[Slide]) -> List[str]:
     return []
 
 
-if __name__ == "__main__":
+def run_example(destination: str | Path = Path("examples") / "generated_analysis_output.json") -> AnalysisOutput:
+    """Run a small built-in example and persist the generated output."""
     example_payload = [
         {
             "id": "ts-001",
@@ -81,5 +82,11 @@ if __name__ == "__main__":
 
     documents = parse_input_documents(example_payload)
     result = build_analysis(documents)
-    save_analysis(result, Path("examples") / "generated_analysis_output.json")
-    print("Analysis written to examples/generated_analysis_output.json")
+    save_analysis(result, destination)
+    return result
+
+
+if __name__ == "__main__":
+    output_path = Path("examples") / "generated_analysis_output.json"
+    run_example(output_path)
+    print(f"Analysis written to {output_path}")

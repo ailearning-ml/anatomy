@@ -58,21 +58,24 @@ class DependencyAnalyzer:
         )
 
     def _infer_dependency(self, source: Document, target: Document, source_text: str) -> Dependency | None:
-        title_terms = {term.lower() for term in target.title.replace("/", " ").split() if len(term) > 3}
+        title_terms = self._extract_title_terms(target.title)
+        target_title = target.title.lower()
         matching_rules: List[Tuple[str, str]] = []
 
-        target_mentioned = target.title.lower() in source_text or any(term in source_text for term in title_terms)
+        target_mentioned = target_title in source_text or any(term in source_text for term in title_terms)
+        if not target_mentioned:
+            return None
 
         for dep_type, keywords in self.KEYWORD_RULES.items():
             for keyword in keywords:
-                if keyword in source_text and target_mentioned:
+                if keyword in source_text:
                     matching_rules.append((dep_type, keyword))
 
         if not matching_rules:
             return None
 
         dep_type = matching_rules[0][0]
-        basis = "explicit" if target.title.lower() in source_text else "inferred"
+        basis = "explicit" if target_title in source_text else "inferred"
         criticality = self._infer_criticality(dep_type)
         confidence = self._infer_confidence(dep_type, basis, len(matching_rules))
 
@@ -92,6 +95,10 @@ class DependencyAnalyzer:
             rationale=rationale,
             evidence=evidence,
         )
+
+    @staticmethod
+    def _extract_title_terms(title: str) -> Set[str]:
+        return {term.lower() for term in title.replace("/", " ").split() if len(term) > 3}
 
     @staticmethod
     def _infer_criticality(dep_type: str) -> str:

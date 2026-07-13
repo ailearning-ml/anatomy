@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Iterable, List, Optional
+from typing import Any, Iterable, List, Mapping, Optional
 
 from .models import Document
 
@@ -62,18 +62,18 @@ class DocumentParser:
             summary=summary,
         )
 
-    def parse_many(self, documents: Iterable[dict]) -> List[Document]:
+    def parse_many(self, documents: Iterable[Mapping[str, Any]]) -> List[Document]:
         parsed: List[Document] = []
         for item in documents:
             parsed.append(
                 self.parse_text(
-                    item["text"],
-                    document_id=item["id"],
-                    title=item["title"],
-                    domain=item["domain"],
-                    version=item.get("version"),
-                    organization=item.get("organization"),
-                    summary=item.get("summary"),
+                    str(item["text"]),
+                    document_id=str(item["id"]),
+                    title=str(item["title"]),
+                    domain=str(item["domain"]),
+                    version=self._optional_str(item.get("version")),
+                    organization=self._optional_str(item.get("organization")),
+                    summary=self._optional_str(item.get("summary")),
                 )
             )
         return parsed
@@ -82,7 +82,7 @@ class DocumentParser:
     def normalize_text(text: str) -> str:
         text = text.replace("\r\n", "\n").replace("\r", "\n")
         lines = [WHITESPACE_PATTERN.sub(" ", line).strip() for line in text.split("\n")]
-        cleaned = "\n".join(line for line in lines)
+        cleaned = "\n".join(lines)
         return cleaned.strip()
 
     @staticmethod
@@ -91,3 +91,9 @@ class DocumentParser:
             return []
         sections = [section.strip() for section in SECTION_SPLIT_PATTERN.split(text) if section.strip()]
         return sections or [text]
+
+    @staticmethod
+    def _optional_str(value: object) -> Optional[str]:
+        if value is None:
+            return None
+        return str(value)
