@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Any, List, Mapping
 
-from .main import build_analysis, parse_input_documents, run_example, save_analysis
+from .main import build_analysis, parse_input_documents, run_example, save_analysis, save_presentation
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
@@ -29,6 +29,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Run the built-in example dataset instead of reading --input.",
     )
+    parser.add_argument(
+        "--pptx-output",
+        type=Path,
+        dest="pptx_output",
+        help="Optional path to write a PowerPoint (.pptx) file in addition to JSON output.",
+    )
     return parser
 
 
@@ -44,8 +50,11 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.example:
-        run_example(args.output)
+        result = run_example(args.output)
         print(f"Analysis written to {args.output}")
+        if args.pptx_output:
+            save_presentation(result, args.pptx_output)
+            print(f"PowerPoint written to {args.pptx_output}")
         return 0
 
     if args.input is None:
@@ -56,6 +65,9 @@ def main() -> int:
     result = build_analysis(documents)
     save_analysis(result, args.output)
     print(f"Analysis written to {args.output}")
+    if args.pptx_output:
+        save_presentation(result, args.pptx_output)
+        print(f"PowerPoint written to {args.pptx_output}")
     return 0
 
 

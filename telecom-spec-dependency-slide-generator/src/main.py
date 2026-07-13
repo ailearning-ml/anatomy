@@ -8,6 +8,7 @@ from typing import Iterable, List, Mapping, Any
 from .dependency_analyzer import DependencyAnalyzer
 from .models import AnalysisOutput, Document, Slide
 from .parser import DocumentParser
+from .pptx_exporter import PptxExporter
 from .slide_generator import SlideGenerator
 
 
@@ -39,6 +40,17 @@ def save_analysis(output: AnalysisOutput, destination: str | Path) -> None:
     path = Path(destination)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(asdict(output), indent=2), encoding="utf-8")
+
+
+def save_presentation(
+    output: AnalysisOutput,
+    destination: str | Path,
+    *,
+    title: str = "Telecom Dependency Anatomy",
+    subtitle: str | None = None,
+) -> None:
+    """Export analysis output as a PowerPoint ``.pptx`` file."""
+    PptxExporter().export(output, destination, title=title, subtitle=subtitle)
 
 
 def _collect_recommendations(slides: Iterable[Slide]) -> List[str]:

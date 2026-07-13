@@ -20,7 +20,8 @@ The current Python implementation provides:
 - rule-based dependency inference across documents;
 - graph summary generation;
 - generation of presentation-oriented slide content objects;
-- a CLI for running the built-in example or processing a JSON input file;
+- PowerPoint `.pptx` export via `PptxExporter` / `save_presentation()`;
+- a CLI for running the built-in example or processing a JSON input file, with optional `--pptx-output`;
 - a basic automated test suite.
 
 ## Package contents
@@ -60,6 +61,7 @@ Optional fields include:
 Currently implemented outputs:
 
 - a single JSON analysis file produced by `save_analysis(...)`;
+- a PowerPoint `.pptx` file produced by `save_presentation(...)` or via `--pptx-output`;
 - structured slide content objects in memory;
 - summary statistics and inferred dependency relationships.
 
@@ -69,7 +71,6 @@ Planned or not yet implemented:
 - `dependency_matrix.csv`
 - `document_summary.json`
 - `risks_and_gaps.json`
-- `dependency_anatomy.pptx`
 
 ## Current slide structure
 
@@ -96,12 +97,27 @@ Run the built-in example:
 python -m src.cli --example
 ```
 
+Run the built-in example and also export a PowerPoint file:
+
+```bash
+python -m src.cli --example --pptx-output examples/dependency_anatomy.pptx
+```
+
 Run against a JSON input file:
 
 ```bash
 python -m src.cli \
   --input telecom-spec-dependency-slide-generator/examples/input_documents.json \
   --output telecom-spec-dependency-slide-generator/examples/generated_analysis_output.json
+```
+
+Run against a JSON input file and save a PowerPoint:
+
+```bash
+python -m src.cli \
+  --input telecom-spec-dependency-slide-generator/examples/input_documents.json \
+  --output telecom-spec-dependency-slide-generator/examples/generated_analysis_output.json \
+  --pptx-output telecom-spec-dependency-slide-generator/examples/dependency_anatomy.pptx
 ```
 
 ## Testing
@@ -116,4 +132,4 @@ pytest telecom-spec-dependency-slide-generator/tests
 
 - The current implementation is intentionally modular and extensible.
 - Dependency detection is currently rule-based and can be expanded with richer parsing or model-assisted extraction.
-- The project includes presentation-oriented slide content generation, but it does not yet generate a `.pptx` file directly.
+- PowerPoint export uses `python-pptx` with standard title/content layouts and bullet-point content.
