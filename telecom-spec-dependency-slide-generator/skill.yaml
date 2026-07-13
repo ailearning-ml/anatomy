@@ -1,0 +1,111 @@
+name: telecom-spec-dependency-slide-generator
+display_name: Telecom Spec Dependency Slide Generator
+description: Analyzes telecom functional specification documents and generates a PowerPoint-style slide deck showing the anatomy of dependencies across features, interfaces, processes, systems, and data.
+version: 1.0.0
+author: ailearning-ml
+category: analysis
+tags:
+  - telecom
+  - dependencies
+  - specifications
+  - powerpoint
+  - architecture
+  - traceability
+
+inputs:
+  input_path:
+    type: string
+    required: true
+    description: Path to the folder containing specification documents
+  output_path:
+    type: string
+    required: true
+    description: Path to the folder where generated artifacts will be written
+  project_name:
+    type: string
+    required: false
+    description: Program or project name
+  analysis_name:
+    type: string
+    required: false
+    default: Dependency Anatomy
+    description: Analysis name displayed in the presentation
+  language:
+    type: string
+    required: false
+    default: en-US
+    description: Primary analysis language
+  confidence_threshold:
+    type: number
+    required: false
+    default: 0.70
+    description: Minimum confidence threshold for inferred dependencies
+  output_formats:
+    type: array
+    required: false
+    default:
+      - pptx
+      - json
+      - csv
+    description: Desired output formats
+
+capabilities:
+  - document_ingestion
+  - metadata_extraction
+  - semantic_analysis
+  - dependency_detection
+  - graph_generation
+  - slide_generation
+  - risk_analysis
+
+supported_formats:
+  - pdf
+  - docx
+  - md
+  - txt
+  - xlsx
+  - csv
+
+outputs:
+  - dependency_graph.json
+  - dependency_matrix.csv
+  - document_summary.json
+  - risks_and_gaps.json
+  - dependency_anatomy.pptx
+
+behavior:
+  explicit_dependency_markers:
+    - depends on
+    - requires
+    - uses output from
+    - according to
+    - as defined in
+    - must consume
+    - prerequisite
+    - integrates with
+    - relies on
+  dependency_types:
+    - prerequisite
+    - functional
+    - interface
+    - integration
+    - data
+    - process
+    - event
+    - regulatory
+    - blocking
+    - upstream
+    - downstream
+  telecom_domains:
+    - CRM
+    - Billing
+    - Charging
+    - Product Catalog
+    - Order Capture
+    - Order Management
+    - Service Fulfillment
+    - Provisioning
+    - Mediation
+    - Inventory
+    - Network Activation
+    - Assurance
